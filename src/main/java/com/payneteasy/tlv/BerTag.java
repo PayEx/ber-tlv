@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class BerTag {
     public final byte[] bytes;
+    public boolean indefinite = false;
 
     /**
      * Creates a new tag from given byte array. Similar {@link BerTag#BerTag(byte[], int, int)} but using
@@ -35,6 +36,15 @@ public class BerTag {
 
     public boolean isConstructed() {
         return (bytes[0] & 0x20) != 0;
+    }
+
+    public boolean isIndefinite() {
+        return indefinite;
+    }
+
+    public BerTag setIndefinite(boolean indefinite){
+        this.indefinite = indefinite;
+        return this;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.payneteasy.tlv;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -88,6 +89,29 @@ public class BerTlvBuilderTest {
         List<BerTlv> list = tlv.findAll(TAG_86);
         System.out.println("list = " + list);
 
+    }
+
+    @Test
+    public void testComplexIndefinite(){
+            ArrayList<BerTlv> lst = new ArrayList<BerTlv>();
+            lst.add(new BerTlv(new BerTag(0x9f, 0x22).setIndefinite(true), "The Text".getBytes()));
+            lst.add(new BerTlv(new BerTag(0x9f, 0x22).setIndefinite(true), "The Text2".getBytes()));
+
+            BerTag tag = new BerTag(0xBF, 0x20).setIndefinite(true);
+
+            BerTlvs tlvs = new BerTlvBuilder()
+                    .addBerTlv(new BerTlv(tag, lst))
+                    .buildTlvs();
+
+            System.out.println(tlvs.toString());
+
+            BerTlv berTlv = new BerTlv(tag, lst);
+
+            byte[] tlvBytes = new BerTlvBuilder()
+                    .addBerTlv(berTlv)
+                    .buildArray();
+
+            System.out.println(HexUtil.toFormattedHexString(tlvBytes));
     }
 
     @Test
